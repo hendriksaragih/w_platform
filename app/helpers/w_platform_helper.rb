@@ -41,6 +41,7 @@ module WPlatformHelper
     features
   end
 
+  #modified by hendrik
   def check_user_access(skipped_controllers_actions=[])
     controller_name, action_name = assign_controller_and_action_name
     unless access_skipped_controllers?(skipped_controllers_actions, controller_name, action_name)
@@ -48,10 +49,7 @@ module WPlatformHelper
         unless user_has_access_to?(controller_name, action_name)
           if controller_name == WPlatformConfig.root_controller and action_name ==  WPlatformConfig.root_action
             back_url = request.referer.blank? ? WPlatformConfig.appschef_url : request.referer
-            redirect_to back_url
-          else
-            flash[:error] = "Sorry, you dont have permission to open the page !"
-            redirect_to "/"
+            redirect_to back_url          
           end
         end
 
@@ -61,6 +59,11 @@ module WPlatformHelper
 
     end
 
+  end
+  
+  #added by hendrik
+  def get_api_user_list_platform
+    get_user_list()
   end
   
 end
