@@ -134,6 +134,7 @@ module WPlatformAuthentication
     redirect_to "#{url}#{params_string}"
   end
 
+  #modified by hendrik
   def logout_and_back_to_platform(logout_from_platform=true)
     if logout_from_platform and has_complete_sessions?
       w_token = session[:w_token]
@@ -145,8 +146,21 @@ module WPlatformAuthentication
       session[:company] = nil
       redirect_to "#{WPlatformConfig.appschef_url}#{WPlatformConfig.w_api_url_users}#{w_token}/logout/#{WPlatformConfig.api_key}"
     else
-      redirect_to WPlatformConfig.appschef_url
+      redirect_to "#{WPlatformConfig.appschef_url}#{WPlatformConfig.w_api_url_get_active_session}"
     end
+  end
+  
+  #added by hendrik
+  def get_user_list()
+    users = {}
+    token = session[:w_token]
+    company_permalink = session[:company_permalink]
+    api_address = "#{WPlatformConfig.appschef_url}/api/users/#{token}/#{WPlatformConfig.api_key}/user_list/#{company_permalink}"
+    result = call_w_platform_api(api_address)
+    if result 
+      users = result          
+    end
+    users
   end
 
 end
